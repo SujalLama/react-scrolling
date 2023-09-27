@@ -1,0 +1,28 @@
+.container {
+  background: grey;
+}
+
+.red {
+  opacity: 1;
+  transition: opacity ease-in-out 0.5s 0.1s;
+}
+
+.blue {
+  opacity: 0;
+  transition: all ease-in-out 0.5s 0.1s;
+}
+
+.rotate {
+  transform: rotate(24deg);
+  transition: transform ease-in-out 0.5s 0.1s;
+}
+
+.translate {
+  transform: translateX(-200px);
+  transition: transform ease-in-out 0.5s 0.1s;
+}
+
+.scale {
+  transform: scale(1.2);
+  transition: transform ease-in-out 0.5s 0.1s;
+}
