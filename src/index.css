@@ -1,28 +1,54 @@
-.container {
-  background: grey;
-}
-
-.red {
-  opacity: 1;
-  transition: opacity ease-in-out 0.5s 0.1s;
-}
-
-.blue {
+.from-fade {
   opacity: 0;
-  transition: all ease-in-out 0.5s 0.1s;
+  transition-property: opacity, transform;
 }
 
-.rotate {
-  transform: rotate(24deg);
-  transition: transform ease-in-out 0.5s 0.1s;
+.fade {
+  opacity: 1;
+  transition-property: opacity;
 }
 
-.translate {
-  transform: translateX(-200px);
-  transition: transform ease-in-out 0.5s 0.1s;
+.from-fade-up {
+  opacity: 0;
+  
+  transition-property: opacity, transform;
 }
 
-.scale {
-  transform: scale(1.2);
-  transition: transform ease-in-out 0.5s 0.1s;
+.fade-up {
+  opacity: 1;
+  transform: translateY(0);
+  transition-property: opacity, transform;
+}
+
+.from-fade-down {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+
+.fade-down {
+  opacity: 1;
+  transform: translateY(0);
+  transition-property: opacity, transform;
+}
+
+.from-fade-left {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+
+.fade-left {
+  opacity: 1;
+  transform: translateX(0);
+  transition-property: opacity, transform;
+}
+
+.from-fade-right {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+
+.fade-right {
+  opacity: 1;
+  transform: translateX(0);
+  transition-property: opacity, transform;
 }

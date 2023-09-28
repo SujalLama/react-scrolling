@@ -1,39 +1,37 @@
 
-import { useRef, forwardRef, PropsWithRef, useEffect, useState} from 'react';
+
 import './App.css'
-import useObserver from './hooks/useObserver';
+import Animate from './components/animate/Animate';
 
 function App() {
 
   return (
     <div className='container'>
+      <Animate>
+        <Box  color='red' text="fade"/>
+      </Animate>
     
-      <Box  className='red'/>
-    
-      <Box className='rotate'/>
+      <Animate animate='fade-down'>
+        <Box color='green' text="fade-down"/>
+      </Animate>
   
-      <Box className='translate'/>
-    
-    
-      <Box className='scale'/>
+      <Animate animate='fade-up' once={false}>
+        <Box color='blue' text="fade-up" />
+      </Animate>
+
+      <Animate animate='fade-left'>
+        <Box color='green' text="fade-left" />
+      </Animate>
+
+      <Animate animate='fade-right'>
+        <Box  color='red' text="fade-right" />
+      </Animate>
     </div>
   )
 }
 
-const Box = ({className} :{className: string}) => {
-  const element = useRef<HTMLDivElement>(null);
-  const [item, setItem] = useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if(element.current) {
-      setItem(element.current);
-    }
-  }, [])
-
-  useObserver({target : item || null, className: className});
-  
-
-  return <div className='blue' ref={element} style={{height: '100vh', width: '50vw', marginBottom: '30px', backgroundColor: 'blue'}}></div>
+const Box = ({color, text} :{color: string, text: string}) => {
+  return <div style={{height: '50vh', width: '50vw', marginBottom: '30px', backgroundColor: color, fontSize: "2rem"}}>{text}</div>
 };
 
 export default App
