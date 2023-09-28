@@ -3,39 +3,37 @@ import { useEffect } from 'react'
 interface Option {
     root: null | HTMLElement;
     rootMargin: string;
-    threshold: number | number[];
+    threshold: number;
 }
 
 interface IObserver {
     target: HTMLDivElement | null, 
     options?: Option;
-    className?: string;
-    initClassName?: string;
-    initialStyle: string;
-    transformedStyle: string;
+    fromStyle: string;
+    toStyle: string;
     once?: boolean;
-}
-
-const initialOptions = {
-  root: null,
-  rootMargin: '0px',
-  threshold: [0.9, 0.1],
+    trigger?: number;
 }
 
 export default function useObserver(
     {
     target, 
-    options = initialOptions,
-    className,
-    initialStyle,
-    transformedStyle,
-    once = true
+    fromStyle,
+    toStyle,
+    once = true,
+    trigger = 0.9
     }
     :IObserver) {
 
+      
+      useEffect(() => {
+        const initialOptions = {
+          root: null,
+          rootMargin: '0px',
+          threshold: trigger,
+        }
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(intersectionCb, options);
+        const observer = new IntersectionObserver(intersectionCb, initialOptions);
 
         if(!target) {
           return;
@@ -48,16 +46,16 @@ export default function useObserver(
             const target = entry.target as HTMLElement;
             if(once) {
               if(entry.isIntersecting) { 
-                target.style.cssText = transformedStyle;
+                target.style.cssText = toStyle;
               }
 
             } else {
 
               if(entry.isIntersecting) { 
                 
-                target.style.cssText = transformedStyle;
+                target.style.cssText = toStyle;
               } else {
-                target.style.cssText = initialStyle;
+                target.style.cssText = fromStyle;
               }
 
             }
@@ -67,7 +65,7 @@ export default function useObserver(
 
       return () => observer.unobserve(target);
 
-    }, [target, options, className, initialStyle, transformedStyle, once])
+    }, [target, fromStyle, toStyle, once, trigger])
 
 
 

@@ -11,31 +11,22 @@ interface IAnimateProps {
     easing?: string;
     delay?: number;
     offset?: number;
+		trigger?: number;
 }
 
 export default function Animate({
     children, 
     animate = "fade",
     duration = 300,
-    once = false,
+    once = true,
     easing = 'ease-in',
     delay = 300,
     offset = 40,
+		trigger = 0.1,
   }: PropsWithChildren<IAnimateProps>) {
 
   const element = useRef<HTMLDivElement>(null);
   const [item, setItem] = useState<HTMLDivElement | null>(null);
-  const className = `from-${animate}`;
-
-  // styling
-	// const initialStyle : {[index: string] : string}  = {
-	// 	'fade': `translate(0)`,
-	// 	'fade-up' : `translateY(${offset}px)`,
-	// 	'fade-down' : `translateY(-${offset}px)`,
-	// 	'fade-left' : `translateX(${offset}px)`,
-	// 	'fade-right': `translateX(-${offset}px)`,
-	// }
-
 	
 	const commonTransitionStyle = {
 		transitionDuration: `${duration}ms`,
@@ -76,9 +67,10 @@ export default function Animate({
 
   useObserver({
     target : item || null, 
-    initialStyle: initStyleString[animate],
-		transformedStyle: transformedStyle[animate], 
-    once
+    fromStyle: initStyleString[animate],
+		toStyle: transformedStyle[animate], 
+    once,
+		trigger
   });
   
   return (
