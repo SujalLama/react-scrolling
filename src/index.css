@@ -16,3 +16,17 @@
 		}
 		#top { top: 0; }
 		#bottom { bottom: 0; }
+
+
+    #left {
+      left: 100px;
+    }
+    #right {
+      right: 100px;
+    }
+    #top {
+      top: 100px;
+    }
+    #bottom {
+      bottom: 100px;
+    }

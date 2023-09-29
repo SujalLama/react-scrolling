@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 interface Option {
     root: null | HTMLElement;
@@ -12,7 +12,8 @@ interface IObserver {
     fromStyle: string;
     toStyle: string;
     once?: boolean;
-    trigger?: number;
+    trigger?: number | number[];
+    offset?: string;
 }
 
 export default function useObserver(
@@ -21,15 +22,18 @@ export default function useObserver(
     fromStyle,
     toStyle,
     once = true,
-    trigger = 0.9
+    trigger = 1,
+    offset,
     }
     :IObserver) {
+
+      const [isIntersecting, setIsIntersecting] = useState(false);
 
       
       useEffect(() => {
         const initialOptions = {
           root: null,
-          rootMargin: '0px',
+          rootMargin: offset,
           threshold: trigger,
         }
 
@@ -44,6 +48,8 @@ export default function useObserver(
       function intersectionCb (entries : IntersectionObserverEntry[]) {
           entries.forEach((entry) => {
             const target = entry.target as HTMLElement;
+            // setIsIntersecting(entry.isIntersecting);
+            
             if(once) {
               if(entry.isIntersecting) { 
                 target.style.cssText = toStyle;
@@ -65,10 +71,10 @@ export default function useObserver(
 
       return () => observer.unobserve(target);
 
-    }, [target, fromStyle, toStyle, once, trigger])
+    }, [target, fromStyle, toStyle, once, trigger, offset])
 
 
 
     
-  return [target];
+  return [isIntersecting];
 }

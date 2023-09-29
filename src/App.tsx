@@ -8,9 +8,10 @@ function App() {
   return (
     <div className='container'>
       <div id="left"></div>
-<div id="right"></div>
-<div id="top"></div>
-<div id="bottom"></div>
+      <div id="right"></div>
+      <div id="top"></div>
+      <div id="bottom"></div>
+
       <Animate>
         <Box  color='red' text="fade"/>
       </Animate>
@@ -19,7 +20,7 @@ function App() {
         <Box color='green' text="fade-down"/>
       </Animate>
   
-      <Animate animate='fade' once={false} trigger={0.5} duration={1000} delay={0}>
+      <Animate animate='fade-up'>
         <Box color='blue' text="fade-up" />
       </Animate>
 
