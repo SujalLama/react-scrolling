@@ -1,5 +1,5 @@
 import { PropsWithChildren, createContext } from "react";
-import useScroll from "../../hooks/useScroll";
+import useScroll from "../../hooks/useScrollPosition";
 
 const INITIAL_SCROLL_VALUE = {
     scrollX: 0,

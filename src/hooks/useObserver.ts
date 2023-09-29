@@ -28,7 +28,7 @@ export default function useObserver(
     : IObserver) {
 
       const [isIntersecting, setIsIntersecting] = useState(false);
-      const [intersectRatio, setIntersectRatio] = useState<number>(0);
+      const [targetBound, setTargetBound] = useState<DOMRectReadOnly | null>(null);
 
       
       useEffect(() => {
@@ -50,7 +50,7 @@ export default function useObserver(
           
           entries.forEach(entry => {
 
-            setIntersectRatio(Math.round(entry.intersectionRatio * 100));
+            setTargetBound(entry.boundingClientRect)
 
             if(!once) {
               setIsIntersecting(entry.isIntersecting);
@@ -69,5 +69,5 @@ export default function useObserver(
 
       }, [target, trigger, offset, once, root]);
     
-  return [isIntersecting, intersectRatio];
+  return [isIntersecting, targetBound];
 }

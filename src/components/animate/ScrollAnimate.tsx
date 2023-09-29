@@ -15,20 +15,15 @@ interface IClassName {
 	[property : string] : string;
 }
 
-interface IAnimate {
-	from: IClassName,
-	to: IClassName,
-}
 
 interface IAnimateProps {
     animate?: DefaultStyles;
-		animateStyle?: IAnimate;
     once?: boolean;
     duration?: number;
     easing?: string;
     delay?: number;
     offset?: string;
-		trigger?: number | number[];
+	trigger?: number | number[];
 }
 
 function generateStyle ({animate, easing, duration, delay} : IAnimateProps) {
@@ -90,15 +85,15 @@ function generateStyle ({animate, easing, duration, delay} : IAnimateProps) {
 	return [fromStyle[animate], toStyle[animate]];
 }
 
-export default function Animate({
+export default function ScrollAnimate({
     children, 
     animate = 'fade',
-    duration = 3000,
-    once = false,
-    easing = 'cubic-bezier(.175,.885,.32,1.275)',
+    duration = 500,
+    once = true,
+    easing = 'ease-in-out',
     delay = 300,
-    offset = `0px 0px 100px 0px`,
-		trigger = [0.9],
+    offset = `0px`,
+	trigger = 0.1,
   }: PropsWithChildren<IAnimateProps>) {
 
   const element = useRef<HTMLDivElement>(null);
@@ -119,15 +114,15 @@ export default function Animate({
 
   const [isIntersecting] = useObserver({
     target : item || null, 
-		trigger,
-		offset,
-		once
+	trigger,
+	offset,
+	once
   });
   
   return (
     <div 
-			ref={element}
-			style={isIntersecting ? to : from}
+		ref={element}
+		style={isIntersecting ? to : from}
     >
       {children}
     </div>
