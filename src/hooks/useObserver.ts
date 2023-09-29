@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
-interface Option {
+export interface Option {
     root: null | HTMLElement;
     rootMargin: string;
     threshold: number;
 }
 
-interface IObserver {
+export interface IObserver {
     target: HTMLDivElement | null, 
     options?: Option;
     once?: boolean;
@@ -14,6 +14,8 @@ interface IObserver {
     offset?: string;
     root?: HTMLDivElement | null
 }
+
+// const thresholds = Array(50).fill(1).map((_, index) => (index + 1) / 100);
 
 export default function useObserver(
     {
@@ -23,18 +25,17 @@ export default function useObserver(
     once,
     root= null
     }
-    :IObserver) {
+    : IObserver) {
 
       const [isIntersecting, setIsIntersecting] = useState(false);
-      const [rootBound, setRootBound] = useState<DOMRectReadOnly | null>(null);
-      const [targetBound, setTargetBound] = useState<DOMRectReadOnly | null>(null);
+      const [intersectRatio, setIntersectRatio] = useState<number>(0);
 
       
       useEffect(() => {
         const initialOptions = {
           root: root,
           rootMargin: offset,
-          threshold: trigger,
+          threshold: [0.0],
         }
 
         const observer = new IntersectionObserver(intersectionCb, initialOptions);
@@ -43,26 +44,30 @@ export default function useObserver(
           return;
         }
         
-      observer.observe(target);
+        observer.observe(target);
 
-      function intersectionCb (entries : IntersectionObserverEntry[]) {
-        setRootBound(entries[0].rootBounds);
-        setTargetBound(entries[0].boundingClientRect);
-        if(once) {
-          setIsIntersecting(entries[0].isIntersecting);
-        } else {
-          if(entries[0].isIntersecting) {
-            setIsIntersecting(true);
-          }
+        function intersectionCb (entries : IntersectionObserverEntry[]) {
+          
+          entries.forEach(entry => {
+
+            setIntersectRatio(Math.round(entry.intersectionRatio * 100));
+
+            if(!once) {
+              setIsIntersecting(entry.isIntersecting);
+            } else {
+
+              if(entry.isIntersecting) {
+                setIsIntersecting(true);
+              }
+
+            }
+          })
+
         }
-      }
 
-      return () => observer.unobserve(target);
+        return () => observer.unobserve(target);
 
-    }, [target, trigger, offset, once, root])
-
-
-
+      }, [target, trigger, offset, once, root]);
     
-  return [isIntersecting, rootBound, targetBound];
+  return [isIntersecting, intersectRatio];
 }

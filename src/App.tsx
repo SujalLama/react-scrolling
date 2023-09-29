@@ -13,11 +13,10 @@ function App() {
     setRef(childRef.current)
   }, [])
 
-  const [isIntersecting, rootBound, targetBound] = useObserver({target: ref, once: false});
-  console.log(rootBound);
-  console.log(targetBound);
+  // const [isIntersecting, intersectRatio] = useObserver({target: ref, once: false, offset: '0px 0px 40px 0px'});
+  // console.log(intersectRatio);
 
-  console.log(isIntersecting);
+  // console.log(isIntersecting);
   return (
     <div className='container'>
       <div id="left"></div>
@@ -25,11 +24,14 @@ function App() {
       <div id="top"></div>
       <div id="bottom"></div>
 
-      <div style={{width: '100vw', height: '100vh', backgroundColor: 'gray', position: 'relative'}}>
-        <div ref={childRef} style={{width: '100px', height: '100px', backgroundColor: 'red', position: isIntersecting ? 'fixed' : 'relative'}}>
-          absd
-        </div>
-      </div>
+      {/* 
+        <div ref={childRef} style={{width: '100vw', height: '100vh', backgroundColor: 'gray', position: 'relative'}}>
+          <div  style={{width: '100px', height: '100px', backgroundColor: 'red', top:0, zIndex: 1, position: (isIntersecting) ? 'sticky' : 'relative'}}>
+            absd
+          </div>
+        </div> 
+      */}
+
       <Animate>
         <Box  color='red' text="fade"/>
       </Animate>
@@ -48,6 +50,62 @@ function App() {
 
       <Animate animate='fade-right'>
         <Box  color='red' text="fade-right" />
+      </Animate>
+      
+      <Animate animate='zoom-in'>
+        <Box  color='red' text="zoom-in" />
+      </Animate>
+
+      <Animate animate='zoom-in-up'>
+        <Box  color='red' text="zoom-in-up" />
+      </Animate>
+
+      <Animate animate='zoom-in-down'>
+        <Box  color='red' text="zoom-in-down" />
+      </Animate>
+
+      <Animate animate='zoom-in-left'>
+        <Box  color='red' text="zoom-in-left" />
+      </Animate>
+
+      <Animate animate='zoom-in-right'>
+        <Box  color='red' text="zoom-in-right" />
+      </Animate>
+
+      <Animate animate='zoom-out'>
+        <Box  color='red' text="zoom-out" />
+      </Animate>
+
+      <Animate animate='zoom-out-up'>
+        <Box  color='red' text="zoom-out-up" />
+      </Animate>
+
+      <Animate animate='zoom-out-down'>
+        <Box  color='red' text="zoom-out-down" />
+      </Animate>
+
+      <Animate animate='zoom-out-left'>
+        <Box  color='red' text="zoom-out-left" />
+      </Animate>
+
+      <Animate animate='zoom-out-right'>
+        <Box  color='red' text="zoom-out-right" />
+      </Animate>
+
+      <Animate animate='slide-up'>
+        <Box  color='red' text="slide-up" />
+      </Animate>
+
+      <Animate animate='slide-down'>
+        <Box  color='red' text="slide-down" />
+      </Animate>
+
+      <Animate animate='slide-left'>
+        <Box  color='red' text="slide-left" />
+      </Animate>
+      
+      <Animate animate='slide-right'>
+        <Box  color='red' text="slide-right" />
       </Animate>
     </div>
   )
