@@ -9,30 +9,30 @@ interface Option {
 interface IObserver {
     target: HTMLDivElement | null, 
     options?: Option;
-    fromStyle: string;
-    toStyle: string;
     once?: boolean;
     trigger?: number | number[];
     offset?: string;
+    root?: HTMLDivElement | null
 }
 
 export default function useObserver(
     {
-    target, 
-    fromStyle,
-    toStyle,
-    once = true,
+    target,
     trigger = 1,
-    offset,
+    offset = '0px',
+    once,
+    root= null
     }
     :IObserver) {
 
       const [isIntersecting, setIsIntersecting] = useState(false);
+      const [rootBound, setRootBound] = useState<DOMRectReadOnly | null>(null);
+      const [targetBound, setTargetBound] = useState<DOMRectReadOnly | null>(null);
 
       
       useEffect(() => {
         const initialOptions = {
-          root: null,
+          root: root,
           rootMargin: offset,
           threshold: trigger,
         }
@@ -46,35 +46,23 @@ export default function useObserver(
       observer.observe(target);
 
       function intersectionCb (entries : IntersectionObserverEntry[]) {
-          entries.forEach((entry) => {
-            const target = entry.target as HTMLElement;
-            // setIsIntersecting(entry.isIntersecting);
-            
-            if(once) {
-              if(entry.isIntersecting) { 
-                target.style.cssText = toStyle;
-              }
-
-            } else {
-
-              if(entry.isIntersecting) { 
-                
-                target.style.cssText = toStyle;
-              } else {
-                target.style.cssText = fromStyle;
-              }
-
-            }
-            
-          })
+        setRootBound(entries[0].rootBounds);
+        setTargetBound(entries[0].boundingClientRect);
+        if(once) {
+          setIsIntersecting(entries[0].isIntersecting);
+        } else {
+          if(entries[0].isIntersecting) {
+            setIsIntersecting(true);
+          }
+        }
       }
 
       return () => observer.unobserve(target);
 
-    }, [target, fromStyle, toStyle, once, trigger, offset])
+    }, [target, trigger, offset, once, root])
 
 
 
     
-  return [isIntersecting];
+  return [isIntersecting, rootBound, targetBound];
 }

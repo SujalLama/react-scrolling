@@ -25,14 +25,19 @@ interface IAnimateProps {
 		trigger?: number | number[];
 }
 
-function generateStyle ({easing, duration, offset, delay} : IAnimateProps) {
+function generateStyle ({animate, easing, duration, delay} : IAnimateProps) {
+
+	if(!animate) {
+		animate = 'fade';
+	}
+	
 	const commonTransitionStyle = {
 		transitionDuration: `${duration}ms`,
 		transitionTimingFunction: `${easing}`,
 		transitionDelay: `${delay}ms`,
 	};
 
-	const initStyle : {[property: string] : {[index: string] : string}} = {
+	const fromStyle : {[property: string] : {[index: string] : string}} = {
 		'fade': {opacity: '0',transitionProperty: `opacity, transform`, ...commonTransitionStyle},
 		'fade-up': {opacity: '0',transform: `translateY(100px)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
 		'fade-down': {opacity: '0',transform: `translateY(-100px)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
@@ -48,26 +53,7 @@ function generateStyle ({easing, duration, offset, delay} : IAnimateProps) {
 		'fade-right': {opacity: '1',transform: `translateX(0)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
 	}
 
-	// const commonToStyleForFade = `opacity: 1;transform: translate(0,0);transition: opacity,transform, ${duration}ms ${easing} ${delay}ms`
-	// const toStyle : {[index: string] : string} = {
-	// 	'fade': commonToStyleForFade,
-	// 	'fade-up': commonToStyleForFade,
-	// 	'fade-down': commonToStyleForFade,
-	// 	'fade-left': commonToStyleForFade,
-	// 	'fade-right': commonToStyleForFade,
-	// }
-
-
-	const commonFromStyleForFade = `opacity: 0;transition: opacity,transform, ${duration}ms ${easing} ${delay}ms;`;
-	const fromStyle : {[index: string] : string} = {
-		'fade': commonFromStyleForFade,
-		'fade-up': `transform: translateY(100px);${commonFromStyleForFade}`,
-		'fade-down': `transform: translateY(-100px);${commonFromStyleForFade}`,
-		'fade-left': `transform: translateX(100px);${commonFromStyleForFade}`,
-		'fade-right': `transform: translateX(-100px);${commonFromStyleForFade}`,
-	}
-
-	return [initStyle, fromStyle, toStyle];
+	return [fromStyle[animate], toStyle[animate]];
 }
 
 export default function Animate({
@@ -85,7 +71,7 @@ export default function Animate({
   const [item, setItem] = useState<HTMLDivElement | null>(null);
 
 
-	const [initStyle, fromStyle, toStyle] = generateStyle({easing,delay, duration, offset});
+	const [initStyle, toStyle] = generateStyle({animate, easing,delay, duration, offset});
 
 
   useEffect(() => {
@@ -94,26 +80,20 @@ export default function Animate({
     }
   }, [])
 
-	const init = initStyle[animate] as IClassName;
-	const from = fromStyle[animate];
-	const to = toStyle[animate] as IClassName;
+	const from = initStyle as IClassName;
+	const to = toStyle as IClassName;
 
-  const [isIntersecting, intersectRatio] = useObserver({
+  const [isIntersecting] = useObserver({
     target : item || null, 
-    fromStyle: 'from as string',
-		toStyle: 'to as string', 
-    once,
 		trigger,
-		offset
+		offset,
+		once
   });
-
-	console.log(isIntersecting);
-	console.log(intersectRatio);
   
   return (
     <div 
         ref={element}
-				style={isIntersecting ? to : init}
+				style={isIntersecting ? to : from}
     >
         {children}
     </div>

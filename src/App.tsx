@@ -1,10 +1,23 @@
 
 
+import { useEffect, useRef, useState } from 'react';
 import './App.css'
 import Animate from './components/animate/Animate';
+import useObserver from './hooks/useObserver';
 
 function App() {
+  const [ref, setRef] = useState<HTMLDivElement | null>(null);
+  const childRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    setRef(childRef.current)
+  }, [])
+
+  const [isIntersecting, rootBound, targetBound] = useObserver({target: ref, once: false});
+  console.log(rootBound);
+  console.log(targetBound);
+
+  console.log(isIntersecting);
   return (
     <div className='container'>
       <div id="left"></div>
@@ -12,6 +25,11 @@ function App() {
       <div id="top"></div>
       <div id="bottom"></div>
 
+      <div style={{width: '100vw', height: '100vh', backgroundColor: 'gray', position: 'relative'}}>
+        <div ref={childRef} style={{width: '100px', height: '100px', backgroundColor: 'red', position: isIntersecting ? 'fixed' : 'relative'}}>
+          absd
+        </div>
+      </div>
       <Animate>
         <Box  color='red' text="fade"/>
       </Animate>
