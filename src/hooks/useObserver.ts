@@ -15,8 +15,6 @@ export interface IObserver {
     root?: HTMLDivElement | null
 }
 
-// const thresholds = Array(50).fill(1).map((_, index) => (index + 1) / 100);
-
 export default function useObserver(
     {
     target,
@@ -28,6 +26,7 @@ export default function useObserver(
     : IObserver) {
 
       const [isIntersecting, setIsIntersecting] = useState(false);
+      const [intersectRatio, setIntersectRatio] = useState<number>(0);
       const [targetBound, setTargetBound] = useState<DOMRectReadOnly | null>(null);
 
       
@@ -35,7 +34,7 @@ export default function useObserver(
         const initialOptions = {
           root: root,
           rootMargin: offset,
-          threshold: [0.0],
+          threshold: trigger,
         }
 
         const observer = new IntersectionObserver(intersectionCb, initialOptions);
@@ -50,7 +49,8 @@ export default function useObserver(
           
           entries.forEach(entry => {
 
-            setTargetBound(entry.boundingClientRect)
+            setIntersectRatio(entry.intersectionRatio);
+            setTargetBound(entry.boundingClientRect);
 
             if(!once) {
               setIsIntersecting(entry.isIntersecting);
@@ -69,5 +69,5 @@ export default function useObserver(
 
       }, [target, trigger, offset, once, root]);
     
-  return [isIntersecting, targetBound];
+  return [isIntersecting, intersectRatio, targetBound];
 }

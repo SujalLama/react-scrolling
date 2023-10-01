@@ -1,23 +1,12 @@
 
 
-import { useEffect, useRef, useState } from 'react';
+
 import './App.css'
-import ScrollAnimate from './components/animate/ScrollAnimate';
-import useObserver from './hooks/useObserver';
 import Scrolling from './components/animate/Scrolling';
+// import ScrollAnimate from './components/animate/ScrollAnimate';
 
 function App() {
-  const [ref, setRef] = useState<HTMLDivElement | null>(null);
-  const childRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setRef(childRef.current)
-  }, [])
-
-  // const [isIntersecting, intersectRatio] = useObserver({target: ref, once: false, offset: '0px 0px 40px 0px'});
-  // console.log(intersectRatio);
-
-  // console.log(isIntersecting);
+  
   return (
     <div className='container'>
       <div id="left"></div>
@@ -25,105 +14,175 @@ function App() {
       <div id="top"></div>
       <div id="bottom"></div>
 
-      {/* 
-        <div ref={childRef} style={{width: '100vw', height: '100vh', backgroundColor: 'gray', position: 'relative'}}>
-          <div  style={{width: '100px', height: '100px', backgroundColor: 'red', top:0, zIndex: 1, position: (isIntersecting) ? 'sticky' : 'relative'}}>
-            absd
-          </div>
-        </div> 
-      */}
-
-      <Box color='red' text="fade"/>
-      <Scrolling>
-        <Box color='red' text="fade"/>
-      </Scrolling>
-
+      {/* Scrolling  */}
+      <div>
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
-        <Box color='red' text="fade"/>
-        <Box color='red' text="fade"/>
-
-      {/* <ScrollAnimate>
-        <Box  color='red' text="fade"/>
-      </ScrollAnimate>
-    
-      <ScrollAnimate animate='fade-down'>
-        <Box color='green' text="fade-down"/>
-      </ScrollAnimate>
-  
-      <ScrollAnimate animate='fade-up'>
-        <Box color='blue' text="fade-up" />
-      </ScrollAnimate>
-
-      <ScrollAnimate animate='fade-left'>
-        <Box color='green' text="fade-left" />
-      </ScrollAnimate>
-
-      <ScrollAnimate animate='fade-right'>
-        <Box  color='red' text="fade-right" />
-      </ScrollAnimate>
+        <Scrolling>
+          <Box  color='red' text="fade"/>
+        </Scrolling>
       
-      <ScrollAnimate animate='zoom-in'>
-        <Box  color='red' text="zoom-in" />
-      </ScrollAnimate>
+        <Scrolling animate='fade-down'>
+          <Box color='green' text="fade-down"/>
+        </Scrolling>
+    
+        <Scrolling animate='fade-up' >
+          <Box color='blue' text="fade-up" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-in-up'>
-        <Box  color='red' text="zoom-in-up" />
-      </ScrollAnimate>
+        <Scrolling animate='fade-left' translateBy={100} translateUnit='%'>
+          <Box color='green' text="fade-left" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-in-down'>
-        <Box  color='red' text="zoom-in-down" />
-      </ScrollAnimate>
+        <Scrolling animate='fade-right'>
+          <Box  color='red' text="fade-right" />
+        </Scrolling>
+        
+        <Scrolling animate='zoom-in'>
+          <Box  color='red' text="zoom-in" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-in-left'>
-        <Box  color='red' text="zoom-in-left" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-in-up'>
+          <Box  color='red' text="zoom-in-up" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-in-right'>
-        <Box  color='red' text="zoom-in-right" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-in-down'>
+          <Box  color='red' text="zoom-in-down" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-out'>
-        <Box  color='red' text="zoom-out" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-in-left'>
+          <Box  color='red' text="zoom-in-left" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-out-up'>
-        <Box  color='red' text="zoom-out-up" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-in-right'>
+          <Box  color='red' text="zoom-in-right" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-out-down'>
-        <Box  color='red' text="zoom-out-down" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-out'>
+          <Box  color='red' text="zoom-out" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-out-left'>
-        <Box  color='red' text="zoom-out-left" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-out-up'>
+          <Box  color='red' text="zoom-out-up" />
+        </Scrolling>
 
-      <ScrollAnimate animate='zoom-out-right'>
-        <Box  color='red' text="zoom-out-right" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-out-down'>
+          <Box  color='red' text="zoom-out-down" />
+        </Scrolling>
 
-      <ScrollAnimate animate='slide-up'>
-        <Box  color='red' text="slide-up" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-out-left'>
+          <Box  color='red' text="zoom-out-left" />
+        </Scrolling>
 
-      <ScrollAnimate animate='slide-down'>
-        <Box  color='red' text="slide-down" />
-      </ScrollAnimate>
+        <Scrolling animate='zoom-out-right'>
+          <Box  color='red' text="zoom-out-right" />
+        </Scrolling>
 
-      <ScrollAnimate animate='slide-left'>
-        <Box  color='red' text="slide-left" />
-      </ScrollAnimate>
+        <Scrolling animate='slide-up'>
+          <Box  color='red' text="slide-up" />
+        </Scrolling>
 
-      <ScrollAnimate animate='slide-right'>
-        <Box  color='red' text="slide-right" />
-      </ScrollAnimate> */}
+        <Scrolling animate='slide-down'>
+          <Box  color='red' text="slide-down" />
+        </Scrolling>
+
+        <Scrolling animate='slide-left'>
+          <Box  color='red' text="slide-left" />
+        </Scrolling>
+
+        <Scrolling animate='slide-right'>
+          <Box  color='red' text="slide-right" />
+        </Scrolling>
+
+        <Box color='red' text="fade"/>
+        <Box color='red' text="fade"/>
+      </div>
+
+      {/* Scroll Animate */}
+      
+      {/* <div>
+        <ScrollAnimate>
+          <Box  color='red' text="fade"/>
+        </ScrollAnimate>
+      
+        <ScrollAnimate animate='fade-down'>
+          <Box color='green' text="fade-down"/>
+        </ScrollAnimate>
+    
+        <ScrollAnimate animate={['opacity', 'moveUp']} opacityFrom={0.5} translateBy='500px' once={false}>
+          <Box color='blue' text="fade-up" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='fade-left'>
+          <Box color='green' text="fade-left" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='fade-right'>
+          <Box  color='red' text="fade-right" />
+        </ScrollAnimate>
+        
+        <ScrollAnimate animate='zoom-in'>
+          <Box  color='red' text="zoom-in" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-in-up'>
+          <Box  color='red' text="zoom-in-up" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-in-down'>
+          <Box  color='red' text="zoom-in-down" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-in-left'>
+          <Box  color='red' text="zoom-in-left" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-in-right'>
+          <Box  color='red' text="zoom-in-right" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-out'>
+          <Box  color='red' text="zoom-out" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-out-up'>
+          <Box  color='red' text="zoom-out-up" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-out-down'>
+          <Box  color='red' text="zoom-out-down" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-out-left'>
+          <Box  color='red' text="zoom-out-left" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='zoom-out-right'>
+          <Box  color='red' text="zoom-out-right" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='slide-up'>
+          <Box  color='red' text="slide-up" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='slide-down'>
+          <Box  color='red' text="slide-down" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='slide-left'>
+          <Box  color='red' text="slide-left" />
+        </ScrollAnimate>
+
+        <ScrollAnimate animate='slide-right'>
+          <Box  color='red' text="slide-right" />
+        </ScrollAnimate>
+      </div> */}
     </div>
   )
 }
 
 const Box = ({color, text} :{color: string, text: string}) => {
-  return <div style={{height: '50vh', width: '50vw', marginBottom: '30px', backgroundColor: color, fontSize: "2rem"}}>{text}</div>
+  return <div style={{height: '800px', width: '50vw', marginBottom: '30px', backgroundColor: color, fontSize: "2rem", padding: '100px',border: '100px solid green'}}>{text}</div>
 };
 
 export default App

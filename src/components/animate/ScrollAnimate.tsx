@@ -1,88 +1,24 @@
 import { PropsWithChildren, useEffect, useRef, useState} from 'react'
 import useObserver from '../../hooks/useObserver';
-
-type DefaultStyles = "fade" | "fade-up" | "fade-down" 
-										|	"fade-left" | "fade-right"
-										| "zoom-in" | "zoom-in-up" | "zoom-in-down"
-										| "zoom-in-left" | "zoom-in-right" | "zoom-out"
-										| "zoom-out-up" | "zoom-out-down" | "zoom-out-left"
-										| "zoom-out-right"
-										| "slide-up" | "slide-down" | "slide-left"
-										| "slide-right";
-
+import { customStyle } from '../../utils/styles';
+import { AcceptedStyle, DefaultStyles } from '../../utils/types';
 
 interface IClassName {
 	[property : string] : string;
 }
 
 
-interface IAnimateProps {
-    animate?: DefaultStyles;
-    once?: boolean;
-    duration?: number;
-    easing?: string;
-    delay?: number;
-    offset?: string;
+interface IScrollAnimateProps {
+	animate?: DefaultStyles | AcceptedStyle[];
+	once?: boolean;
+	duration?: number;
+	easing?: string;
+	delay?: number;
+	offset?: string;
 	trigger?: number | number[];
-}
-
-function generateStyle ({animate, easing, duration, delay} : IAnimateProps) {
-
-	if(!animate) {
-		animate = 'fade';
-	}
-
-	const commonTransitionStyle = {
-		transitionDuration: `${duration}ms`,
-		transitionTimingFunction: `${easing}`,
-		transitionDelay: `${delay}ms`,
-	};
-
-	const fromStyle : {[property: string] : {[index: string] : string}} = {
-		'fade': {opacity: '0',transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-up': {opacity: '0',transform: `translateY(100px)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-down': {opacity: '0',transform: `translateY(-100px)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-left': {opacity: '0',transform: `translateX(100px)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-right': {opacity: '0',transform: `translateX(-100px)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		"zoom-in" : {opacity: '0',transform: `scale(0.6)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-up" : {opacity: '0',transform: `translateY(100px) scale(0.6)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-down" : {opacity: '0',transform: `translateY(-100px) scale(0.6)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-left" : {opacity: '0',transform: `translateX(100px) scale(0.6)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-right" : {opacity: '0',transform: `translateX(-100px) scale(0.6)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out" : {opacity: '0',transform: `scale(1.2)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out-up" : {opacity: '0',transform: `translateY(100px) scale(1.2)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out-down" : {opacity: '0',transform: `translateY(-100px) scale(1.2)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		"zoom-out-left" : {opacity: '0',transform: `translateX(100px) scale(1.2)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out-right" : {opacity: '0',transform: `translateX(-100px) scale(1.2)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"slide-up" : {transform: `translateY(100%)`,transitionProperty: `transform`, ...commonTransitionStyle}, 
-		"slide-down" : {transform: `translateY(-100%)`,transitionProperty: `transform`, ...commonTransitionStyle}, 
-		"slide-left" : {transform: `translateX(100%)`,transitionProperty: `transform`, ...commonTransitionStyle}, 
-		"slide-right" : {transform: `translateX(-100%)`,transitionProperty: `transform`, ...commonTransitionStyle},
-	}
-
-	const toStyle : {[property: string] : {[index: string] : string}} = {
-		'fade': {opacity: '1',transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-up': {opacity: '1',transform: `translateY(0)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-down': {opacity: '1',transform: `translateY(0)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-left': {opacity: '1',transform: `translateX(0)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		'fade-right': {opacity: '1',transform: `translateX(0)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		"zoom-in" : {opacity: '1',transform: `scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-up" : {opacity: '1',transform: `translateY(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-down" : {opacity: '1',transform: `translateY(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-left" : {opacity: '1',transform: `translateX(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-in-right" : {opacity: '1',transform: `translateX(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out" : {opacity: '1',transform: `scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out-up" : {opacity: '1',transform: `translateY(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out-down" : {opacity: '1',transform: `translateY(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle},
-		"zoom-out-left" : {opacity: '1',transform: `translateX(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"zoom-out-right" : {opacity: '1',transform: `translateX(0) scale(1)`,transitionProperty: `opacity, transform`, ...commonTransitionStyle}, 
-		"slide-up" : {transform: `translateY(0)`,transitionProperty: `transform`, ...commonTransitionStyle}, 
-		"slide-down" : {transform: `translateY(0)`,transitionProperty: `transform`, ...commonTransitionStyle}, 
-		"slide-left" : {transform: `translateX(0)`,transitionProperty: `transform`, ...commonTransitionStyle}, 
-		"slide-right" : {transform: `translateX(0)`,transitionProperty: `transform`, ...commonTransitionStyle},
-	}
-
-	return [fromStyle[animate], toStyle[animate]];
+	translateBy?: string;
+	opacityFrom?: number;
+	scaleBy?: [number, number];
 }
 
 export default function ScrollAnimate({
@@ -93,14 +29,26 @@ export default function ScrollAnimate({
     easing = 'ease-in-out',
     delay = 300,
     offset = `0px`,
-	trigger = 0.1,
-  }: PropsWithChildren<IAnimateProps>) {
+		trigger = 0.1,
+		translateBy = '100px',
+		opacityFrom = 0,
+		scaleBy = [0.6, 1.2],
+
+  }: PropsWithChildren<IScrollAnimateProps>) {
 
   const element = useRef<HTMLDivElement>(null);
   const [item, setItem] = useState<HTMLDivElement | null>(null);
 
 
-	const [initStyle, toStyle] = generateStyle({animate, easing, delay, duration, offset});
+  const [startStyle, endStyle] = generateStyle({
+		animate, 
+		easing, 
+		delay, 
+		duration, 
+		translateBy, 
+		opacityFrom, 
+		scaleBy
+	});
 
 
   useEffect(() => {
@@ -109,22 +57,128 @@ export default function ScrollAnimate({
     }
   }, [])
 
-	const from = initStyle as IClassName;
-	const to = toStyle as IClassName;
+	const start = startStyle as IClassName;
+	const end = endStyle as IClassName;
 
   const [isIntersecting] = useObserver({
     target : item || null, 
-	trigger,
-	offset,
-	once
-  });
+		trigger,
+		offset,
+		once
+	});
   
   return (
     <div 
-		ref={element}
-		style={isIntersecting ? to : from}
+			ref={element}
     >
+			<div style={isIntersecting ? end : start}>
       {children}
+			</div>
     </div>
   )
+}
+
+function generateStyle ({
+	animate = 'fade', 
+	easing, 
+	duration, 
+	delay, 
+	translateBy = '100px', 
+	opacityFrom = 0, 
+	scaleBy = [0.6, 1.2]} : IScrollAnimateProps) {
+
+	const commonTransitionStyle : {[key: string] : string} = {
+		transitionDuration: `${duration}ms`,
+		transitionTimingFunction: `${easing}`,
+		transitionDelay: `${delay}ms`,
+	};
+
+	const animateArray = (typeof animate === 'string') ? customStyle[animate] : animate;
+	return generateStartEndStyle(animateArray, commonTransitionStyle, translateBy, opacityFrom, scaleBy);
+}
+
+function generateStartEndStyle (
+	animateStyle : AcceptedStyle[], 
+	commonTransitionStyle : {[key: string] : string}, 
+	translateBy : string, 
+	opacityFrom : number, 
+	scaleBy : [number, number]) {
+
+	const startStyle : {[index: string] :string} = {...commonTransitionStyle, transitionProperty: `opacity, transform`};
+	const endStyle : {[index: string] :string} = {...commonTransitionStyle, transitionProperty: `opacity, transform`};
+
+	// generate start style
+	animateStyle.forEach(style => {
+        switch(style) {
+            case 'opacity':
+                startStyle['opacity'] = `${opacityFrom}`;
+                break;
+
+            case 'moveRight':
+                if('transform' in startStyle) {
+                    startStyle['transform'] = `${startStyle['transform']} translateX(-${translateBy})`
+                } else {
+                    startStyle['transform'] = `translateX(-${translateBy})`
+                }
+                break;
+
+            case 'moveLeft':
+                if('transform' in startStyle) {
+                    startStyle['transform'] = `${startStyle['transform']} translateX(${translateBy})`
+                } else {
+                    startStyle['transform'] = `translateX(${translateBy})`
+                }
+                
+                break;
+
+            case 'moveDown':
+                if('transform' in startStyle) {
+                    startStyle['transform'] = `${startStyle['transform']} translateY(-${translateBy})`
+                } else {
+                    startStyle['transform'] = `translateY(-${translateBy})`
+                }
+                break;
+
+            case 'moveUp':
+                if('transform' in startStyle) {
+                    startStyle['transform'] = `${startStyle['transform']} translateY(${translateBy})`
+                } else {
+                    startStyle['transform'] = `translateY(${translateBy})`
+                }
+                break;
+
+            case 'scaleUp':
+                if('transform' in startStyle) {
+                    startStyle['transform'] = `${startStyle['transform']} scale(${scaleBy[0]})`
+                } else {
+                    startStyle['transform'] = `scale(${scaleBy[0]})`
+                }
+                break;
+
+            case 'scaleDown':
+                if('transform' in startStyle) {
+                    startStyle['transform'] = `${startStyle['transform']} scale(${scaleBy[1]})`
+                } else {
+                    startStyle['transform'] = `scale(${scaleBy[1]})`
+                }
+                break;
+
+            default:
+                break;
+        }
+    });
+
+	// generate end style
+	for(const key in startStyle) {
+		if(key === 'opacity') {
+			endStyle['opacity'] = '1';
+		}
+
+		if(key === 'transform') {
+			endStyle['transform'] = 'translate(0,0) scale(1)';
+		}
+	}
+
+	return [startStyle, endStyle];
+	
 }
