@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useRef, useState} from 'react'
-import useObserver from '../../hooks/useObserver';
 import { customStyle } from '../../utils/styles';
 import { AcceptedStyle, DefaultStyles, ITransform, ITransition } from '../../utils/types';
+import { useObserver } from '../../main';
 
 interface IClassName {
 	[property : string] : string;
@@ -17,7 +17,7 @@ interface IScrollAnimateProps {
 	transform?: ITransform;
 }
 
-export default function ScrollAnimate({
+export function ScrollAnimate({
     children, 
     animate = 'fade',
     once = true,

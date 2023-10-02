@@ -1,8 +1,7 @@
 import { PropsWithChildren, useEffect, useRef, useState} from "react";
-import useObserver from "../../hooks/useObserver";
 import { DefaultStyles, ITransition } from "../../utils/types";
 import { customStyle } from "../../utils/styles";
-import useScrollPosition from "../../hooks/useScrollPosition";
+import { useObserver, useScrollPosition } from "../../main";
 
 
 const thresholds = Array(100).fill(1).map((_, index) => (index + 1) / 100);
@@ -36,7 +35,7 @@ type TGenerateStyle = IScrollingProps & {scrollRatio: number};
 type TAnimateWhen = 'exit' | 'enter' | 'both';
 
 
-export default function Scrolling({
+export function Scrolling({
         children, 
         animate = 'fade',
         animateWhen = 'enter',  

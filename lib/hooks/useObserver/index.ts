@@ -15,7 +15,7 @@ export interface IObserver {
     root?: HTMLDivElement | null
 }
 
-export default function useObserver(
+export function useObserver(
     {
     target,
     trigger = 1,

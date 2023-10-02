@@ -2,10 +2,7 @@
 
 
 import './App.css'
-import Scrolling from './components/animate/Scrolling';
-import ScrollAnimate from './components/animate/ScrollAnimate';
-
-import ScrollContainer1 from './components/animate/ScrollContainer';
+import {Scrolling, ScrollAnimate} from "../";
 
 function App() {
   
@@ -17,7 +14,7 @@ function App() {
       <div id="bottom"></div>
 
       {/* Scrolling  */}
-      {/* <div>
+      <div>
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
         <Scrolling>
@@ -100,11 +97,11 @@ function App() {
 
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
-      </div> */}
+      </div>
 
       {/* Scroll Animate */}
       
-      {/* <div>
+      <div>
         <ScrollAnimate>
           <Box  color='red' text="fade"/>
         </ScrollAnimate>
@@ -180,7 +177,7 @@ function App() {
         <ScrollAnimate animate='slide-right'>
           <Box  color='red' text="slide-right" />
         </ScrollAnimate>
-      </div> */}
+      </div>
 
     </div>
   )
