@@ -28,6 +28,7 @@ export default function useObserver(
       const [isIntersecting, setIsIntersecting] = useState(false);
       const [intersectRatio, setIntersectRatio] = useState<number>(0);
       const [targetBound, setTargetBound] = useState<DOMRectReadOnly | null>(null);
+      const [rootBound, setRootBound] = useState<DOMRectReadOnly | null>(null);
 
       
       useEffect(() => {
@@ -51,6 +52,7 @@ export default function useObserver(
 
             setIntersectRatio(entry.intersectionRatio);
             setTargetBound(entry.boundingClientRect);
+            setRootBound(entry.rootBounds);
 
             if(!once) {
               setIsIntersecting(entry.isIntersecting);
@@ -69,5 +71,5 @@ export default function useObserver(
 
       }, [target, trigger, offset, once, root]);
     
-  return [isIntersecting, intersectRatio, targetBound];
+  return [isIntersecting, intersectRatio, targetBound, rootBound];
 }

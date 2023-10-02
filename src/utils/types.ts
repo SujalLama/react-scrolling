@@ -10,3 +10,15 @@ export type DefaultStyles = "fade" | "fade-up" | "fade-down"
 export type AcceptedStyle = 'opacity' | 'moveRight' | 'moveLeft' 
 					| 'moveDown' | 'moveUp' | 'scaleUp' | 'scaleDown';
 
+export	interface ITransition {
+		duration?: number;
+		easing?: string;
+		delay?: number;
+	}
+					
+export interface ITransform {
+		translateBy ?: string;
+		opacityFrom ?: number;
+		scaleUpBy ?: number;
+		scaleDownBy ?: number;
+	}

@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useRef, useState} from 'react'
 import useObserver from '../../hooks/useObserver';
 import { customStyle } from '../../utils/styles';
-import { AcceptedStyle, DefaultStyles } from '../../utils/types';
+import { AcceptedStyle, DefaultStyles, ITransform, ITransition } from '../../utils/types';
 
 interface IClassName {
 	[property : string] : string;
@@ -11,29 +11,20 @@ interface IClassName {
 interface IScrollAnimateProps {
 	animate?: DefaultStyles | AcceptedStyle[];
 	once?: boolean;
-	duration?: number;
-	easing?: string;
-	delay?: number;
 	offset?: string;
 	trigger?: number | number[];
-	translateBy?: string;
-	opacityFrom?: number;
-	scaleBy?: [number, number];
+	transition?: ITransition
+	transform?: ITransform;
 }
 
 export default function ScrollAnimate({
     children, 
     animate = 'fade',
-    duration = 500,
     once = true,
-    easing = 'ease-in-out',
-    delay = 300,
+    transition ,
+		transform,
     offset = `0px`,
 		trigger = 0.1,
-		translateBy = '100px',
-		opacityFrom = 0,
-		scaleBy = [0.6, 1.2],
-
   }: PropsWithChildren<IScrollAnimateProps>) {
 
   const element = useRef<HTMLDivElement>(null);
@@ -42,12 +33,8 @@ export default function ScrollAnimate({
 
   const [startStyle, endStyle] = generateStyle({
 		animate, 
-		easing, 
-		delay, 
-		duration, 
-		translateBy, 
-		opacityFrom, 
-		scaleBy
+		transition,
+		transform
 	});
 
 
@@ -80,12 +67,21 @@ export default function ScrollAnimate({
 
 function generateStyle ({
 	animate = 'fade', 
-	easing, 
-	duration, 
-	delay, 
-	translateBy = '100px', 
-	opacityFrom = 0, 
-	scaleBy = [0.6, 1.2]} : IScrollAnimateProps) {
+	transition = {
+		duration : 500,
+		easing : 'ease-in-out',
+		delay : 300,
+	},
+	transform = {
+		translateBy : '100px',
+		opacityFrom : 0,
+		scaleUpBy : 1.2,
+		scaleDownBy : 0.6
+	},
+	} : IScrollAnimateProps) {
+
+
+	const {duration, easing, delay, translateBy, opacityFrom, scaleUpBy, scaleDownBy}  = checkValue(transform, transition);
 
 	const commonTransitionStyle : {[key: string] : string} = {
 		transitionDuration: `${duration}ms`,
@@ -94,7 +90,25 @@ function generateStyle ({
 	};
 
 	const animateArray = (typeof animate === 'string') ? customStyle[animate] : animate;
-	return generateStartEndStyle(animateArray, commonTransitionStyle, translateBy, opacityFrom, scaleBy);
+	return generateStartEndStyle(animateArray, commonTransitionStyle, translateBy, opacityFrom, scaleUpBy, scaleDownBy);
+}
+
+function checkValue(transform : ITransform, transition : ITransition) {
+
+		const {duration, easing, delay} = transition;
+    const { translateBy, opacityFrom, scaleUpBy, scaleDownBy} = transform;
+    
+    const newData = {
+        translateBy : translateBy ?? '100px',
+        opacityFrom : opacityFrom ?? 0,
+        scaleUpBy : scaleUpBy ?? 1.2,
+        scaleDownBy : scaleDownBy ?? 0.6,
+        duration : duration ?? 500,
+        delay : delay ?? 300,
+        easing : easing ?? 'ease-in-out'
+    }
+    
+    return newData;
 }
 
 function generateStartEndStyle (
@@ -102,7 +116,9 @@ function generateStartEndStyle (
 	commonTransitionStyle : {[key: string] : string}, 
 	translateBy : string, 
 	opacityFrom : number, 
-	scaleBy : [number, number]) {
+	scaleUpBy : number,
+	scaleDownBy : number,
+	) {
 
 	const startStyle : {[index: string] :string} = {...commonTransitionStyle, transitionProperty: `opacity, transform`};
 	const endStyle : {[index: string] :string} = {...commonTransitionStyle, transitionProperty: `opacity, transform`};
@@ -149,17 +165,17 @@ function generateStartEndStyle (
 
             case 'scaleUp':
                 if('transform' in startStyle) {
-                    startStyle['transform'] = `${startStyle['transform']} scale(${scaleBy[0]})`
+                    startStyle['transform'] = `${startStyle['transform']} scale(${scaleUpBy})`
                 } else {
-                    startStyle['transform'] = `scale(${scaleBy[0]})`
+                    startStyle['transform'] = `scale(${scaleUpBy})`
                 }
                 break;
 
             case 'scaleDown':
                 if('transform' in startStyle) {
-                    startStyle['transform'] = `${startStyle['transform']} scale(${scaleBy[1]})`
+                    startStyle['transform'] = `${startStyle['transform']} scale(${scaleDownBy})`
                 } else {
-                    startStyle['transform'] = `scale(${scaleBy[1]})`
+                    startStyle['transform'] = `scale(${scaleDownBy})`
                 }
                 break;
 

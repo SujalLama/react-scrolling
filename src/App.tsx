@@ -3,7 +3,9 @@
 
 import './App.css'
 import Scrolling from './components/animate/Scrolling';
-// import ScrollAnimate from './components/animate/ScrollAnimate';
+import ScrollAnimate from './components/animate/ScrollAnimate';
+
+import ScrollContainer1 from './components/animate/ScrollContainer';
 
 function App() {
   
@@ -15,7 +17,7 @@ function App() {
       <div id="bottom"></div>
 
       {/* Scrolling  */}
-      <div>
+      {/* <div>
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
         <Scrolling>
@@ -30,7 +32,9 @@ function App() {
           <Box color='blue' text="fade-up" />
         </Scrolling>
 
-        <Scrolling animate='fade-left' translateBy={100} translateUnit='%'>
+        <Scrolling animate='fade-left' 
+          transform={{translateBy : 100}} 
+          transition={{easing: 'ease-in', delay: 10}} >
           <Box color='green' text="fade-left" />
         </Scrolling>
 
@@ -96,7 +100,7 @@ function App() {
 
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
-      </div>
+      </div> */}
 
       {/* Scroll Animate */}
       
@@ -109,7 +113,7 @@ function App() {
           <Box color='green' text="fade-down"/>
         </ScrollAnimate>
     
-        <ScrollAnimate animate={['opacity', 'moveUp']} opacityFrom={0.5} translateBy='500px' once={false}>
+        <ScrollAnimate animate={['opacity', 'moveUp']} transform={{opacityFrom:0.5, translateBy:'100px'}} once={false}>
           <Box color='blue' text="fade-up" />
         </ScrollAnimate>
 
@@ -177,6 +181,7 @@ function App() {
           <Box  color='red' text="slide-right" />
         </ScrollAnimate>
       </div> */}
+
     </div>
   )
 }

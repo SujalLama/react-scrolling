@@ -1,83 +1,167 @@
 import { PropsWithChildren, useEffect, useRef, useState} from "react";
-import useScrollPosition from "../../hooks/useScrollPosition";
 import useObserver from "../../hooks/useObserver";
-import { DefaultStyles } from "../../utils/types";
+import { DefaultStyles, ITransition } from "../../utils/types";
 import { customStyle } from "../../utils/styles";
+import useScrollPosition from "../../hooks/useScrollPosition";
 
 
 const thresholds = Array(100).fill(1).map((_, index) => (index + 1) / 100);
 
-interface IScrollingProps {
-    animate?: DefaultStyles;
-	once?: boolean;
+interface ITransform {
     translateBy?: number;
     translateUnit?: string;
-    scaleBy?: [number, number];
+    scaleUpBy?: number;
+    scaleDownBy?: number;
+}
+
+interface IScrollingProps {
+    animate?: DefaultStyles;
+    transform?: ITransform;
+    transition?: ITransition;
+    animateWhen?: TAnimateWhen;
 }
 
 type TGenerateStyle = IScrollingProps & {scrollRatio: number};
 
 
 // Todo: 
-// once is not working properly
+// stagger animation
+// pin feature
+// horizontal scrolling
+// disable at for small screen
+
+// features:
+// animate when -> entering the viewport or exiting the viewport or both
+
+type TAnimateWhen = 'exit' | 'enter' | 'both';
 
 
 export default function Scrolling({
         children, 
-        animate = 'fade', 
-        // once = false,
-        translateBy = 500,
-        translateUnit = 'px',
-		scaleBy = [0.4, 1.6],
+        animate = 'fade',
+        animateWhen = 'enter',  
+        transform,
+        transition
     }: PropsWithChildren<IScrollingProps>) {
 
     const divRef = useRef(null);
+    const [divElement, setDivElement] = useState<HTMLDivElement | null>(null);
     const onceRef = useRef(0);
     const [scrollRatio, setScrollRatio] = useState(0);
-    
-    const scrollPos = useScrollPosition();
-    const [, intersectRatio, targetBound ] = useObserver({target: divRef.current, trigger: thresholds, offset:'0px'});
 
+    const {scrollDirection} = useScrollPosition();
+    
+    const [, intersectRatio,] = useObserver({target: divElement, trigger: thresholds, offset:'0px'});
+    
+    useEffect(() => {
+        if(divRef.current) {
+            setDivElement(divRef.current);
+        }
+    }, [])
 
     useEffect(() => {
-        if(!targetBound) {
-            return;
-        }
+        const interesectRaioInHundred = (Math.round((intersectRatio as number) * 100));
 
-        if(!onceRef.current) {
-            setScrollRatio(intersectRatio as number);
-            if(intersectRatio == 1) {
-                onceRef.current = 1;
+        if(animateWhen == 'enter') {
+            if(!onceRef.current) {
+                setScrollRatio(intersectRatio as number);
+                if(interesectRaioInHundred == 100) {
+                    onceRef.current = 1;
+                }
+            }
+    
+            
+            if(onceRef.current == 1) {
+                if(scrollDirection == 'up' && (interesectRaioInHundred == 100)) {
+                    onceRef.current = 0;
+                }
             }
         }
 
-        if(onceRef.current == 1 && (targetBound as DOMRectReadOnly).bottom > scrollPos.scrollY) {
-            onceRef.current = 0;
+        if(animateWhen == 'exit') {
+            if(!onceRef.current) {
+                setScrollRatio(1);
+                if(interesectRaioInHundred == 100) {
+                    onceRef.current = 1;
+                }
+            }
+    
+            
+            if(onceRef.current == 1) {
+                setScrollRatio(intersectRatio as number);
+                if(scrollDirection == 'up' && (interesectRaioInHundred == 100)) {
+                    onceRef.current = 0;
+                }
+            }
         }
 
-    }, [intersectRatio, scrollPos, targetBound])
+        if(animateWhen == 'both') {
+            setScrollRatio(intersectRatio as number);
+        }
 
-    const appliedStyle = generateStyle({animate, scrollRatio, translateBy, scaleBy, translateUnit});
+    }, [intersectRatio, onceRef, scrollDirection, animateWhen])
+
+
+    const appliedStyle = generateStyle({
+        animate, 
+        scrollRatio, 
+        transform,
+        transition,
+        animateWhen,
+    });
 
   return (
-    <div ref={divRef} >
+    <div ref={divRef}>
         <div style={appliedStyle}>{children}</div>
     </div>
   )
 }
 
-function generateStyle ({animate = 'fade', scrollRatio, scaleBy = [0.4, 1.6], translateBy = 500, translateUnit = 'px'} : TGenerateStyle) {
-    const scrollStyle : {[index: string] : string} = {transition: 'opacity, transform, 10ms ease'};
+function generateStyle ({
+    animate = 'fade', 
+    scrollRatio, 
+    transform = {
+        translateBy : 500,
+        translateUnit : 'px',
+        scaleUpBy : 1.6,
+        scaleDownBy : 0.4,
+    },
+    transition = {
+        duration : 30,
+        delay : 0,
+        easing : 'ease'
+    },
+    animateWhen = 'enter'
+    } : TGenerateStyle & {animateWhen : TAnimateWhen}) {
 
-    const moveRight  = ((scrollRatio as number) * translateBy) - translateBy;
-    const moveLeft = (translateBy - (scrollRatio as number) * translateBy);
-    const moveUp = (translateBy - (scrollRatio as number) * translateBy);
-    const moveDown = ((scrollRatio as number) * translateBy) - translateBy;
+    const {duration, easing, delay, translateBy, translateUnit, scaleUpBy, scaleDownBy}  = checkValue(transform, transition);
+
+    const scrollStyle : {[index: string] : string} = {
+        transitionProperty: 'opacity, transform', 
+        transitionDuration: `${duration}ms`, 
+        trasitionTimingFunction: easing , 
+        transitionDelay: `${delay}ms`
+    };
+
+    let moveRight  = ((scrollRatio as number) * translateBy) - translateBy;
+    let moveLeft = (translateBy - (scrollRatio as number) * translateBy);
+    let moveUp = (translateBy - (scrollRatio as number) * translateBy);
+    let moveDown = ((scrollRatio as number) * translateBy) - translateBy;
     
-    const scaleUpRatio = scrollRatio + scaleBy[0];
-    const scaleDownRatio = scaleBy[1] - (scrollRatio * scaleBy[1]);
-    const scaleUp = scaleUpRatio > 1 ? 1 : scaleUpRatio < scaleBy[0]? scaleBy[0] : scaleUpRatio;
-    const scaleDown = scaleDownRatio < 1 ? 1 : scaleDownRatio;
+    const scaleUpRatio = scrollRatio + scaleDownBy;
+    const scaleDownRatio = scaleUpBy - (scrollRatio * scaleUpBy);
+
+    let scaleUp = scaleUpRatio > 1 ? 1 : scaleUpRatio < scaleDownBy ? scaleDownBy : scaleUpRatio;
+    let scaleDown = scaleDownRatio < 1 ? 1 : scaleDownRatio;
+
+    if(animateWhen == 'exit') {
+       moveRight = (translateBy - (scrollRatio as number) * translateBy);
+        moveLeft = ((scrollRatio as number) * translateBy) - translateBy;
+        moveUp = ((scrollRatio as number) * translateBy) - translateBy;
+        moveDown = (translateBy - (scrollRatio as number) * translateBy);
+        scaleUp = scaleDownRatio < 1 ? 1 : scaleDownRatio;
+        scaleDown = scaleUpRatio > 1 ? 1 : scaleUpRatio < scaleDownBy ? scaleDownBy : scaleUpRatio;
+    }
 
     customStyle[animate].forEach(style => {
         switch(style) {
@@ -138,5 +222,22 @@ function generateStyle ({animate = 'fade', scrollRatio, scaleBy = [0.4, 1.6], tr
     });
 
     return scrollStyle;
+}
+
+function checkValue(transform : ITransform, transition : ITransition) {
+    const {duration, easing, delay} = transition;
+    const { translateBy, translateUnit, scaleUpBy, scaleDownBy} = transform;
+    
+    const newData = {
+        translateBy : translateBy ?? 500,
+        translateUnit : translateUnit ?? 'px',
+        scaleUpBy : scaleUpBy ?? 1.6,
+        scaleDownBy : scaleDownBy ?? 0.4,
+        duration : duration ?? 30,
+        delay : delay ?? 0,
+        easing : easing ?? 'ease'
+    }
+    
+    return newData;
 }
 
