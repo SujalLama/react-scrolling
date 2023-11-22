@@ -1,7 +1,7 @@
 {
   "name": "react-scrolling",
   "description": "This is react component library that is heavily influenced by animate on scroll library.",
-  "keywords": ["react-scroll", "scroll-library", "animate-on-scroll-react"],
+  "keywords": ["react scroll", "scroll library", "animate on scroll react"],
   "author": "sujallama",
   "license": "MIT",
   "private": false,
