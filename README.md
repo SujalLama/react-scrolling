@@ -87,18 +87,35 @@ Scrolling props
 ## Types/Interface
 
 -  DefaultStyles : It accepts string value that are predefined to represent various animation styles. Following are the values you can pass:
-   -  "fade" | "fade-up" | "fade-down" 
-      |	"fade-left" | "fade-right"
-      | "zoom-in" | "zoom-in-up" | "zoom-in-down"
-      | "zoom-in-left" | "zoom-in-right" | "zoom-out"
-      | "zoom-out-up" | "zoom-out-down" | "zoom-out-left"
-      | "zoom-out-right"
-      | "slide-up" | "slide-down" | "slide-left"
-      | "slide-right"
+   -  "fade" 
+   -  "fade-up"
+   -  "fade-down" 
+   -  "fade-left"
+   -  "fade-right"
+   -  "zoom-in"
+   -  "zoom-in-up"
+   -  "zoom-in-down"
+   -  "zoom-in-left"
+   -  "zoom-in-right"
+   -  "zoom-out"
+   -  "zoom-out-up"
+   -  "zoom-out-down"
+   -  "zoom-out-left"
+   -  "zoom-out-right"
+   -  "slide-up"
+   -  "slide-down"
+   -  "slide-left"
+   -  "slide-right"
 
 
 -  AcceptedStyle[] : It accepts array of string that are predefined. Following are the values that you can pass in an arrary
-   -  'opacity' | 'moveRight' | 'moveLeft' | 'moveDown' | 'moveUp' | 'scaleUp' | 'scaleDown';
+   -  'opacity'
+   -  'moveRight'
+   -  'moveLeft'
+   -  'moveDown'
+   -  'moveUp'
+   -  'scaleUp'
+   -  'scaleDown'
 
 
 -  ITransition : It accepts object with following key. Every key is optional here.
@@ -113,7 +130,10 @@ Scrolling props
 	-  scaleUpBy : It accepts number which represents how much to scale up your component.
 	-  scaleDownBy : It accepts number which represents how much to scale down your component.;
 
-- TAnimateWhen : It accepts three values: exit, enter and both, which represents when the start the animation.
+- TAnimateWhen : It accepts three values which represents when the start the animation.
+   -  exit : when component is going out of viewport
+   -  enter : when component is going in the viewport
+   -  both : in both above case
 
 ## License
 React Scrolling Library is licensed under the MIT License - see the LICENSE file for details. Feel free to use, modify, and distribute the library according to the terms of the license.
