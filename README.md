@@ -63,7 +63,7 @@ This library includes two components that you can use to wrap your component tha
 
 ## Props
 
-Scroll Animate props
+ScrollAnimate props
 
 | Props | Type | Default Value | Description |
 | -------- | -------- | -------- | ---------  |
@@ -80,8 +80,16 @@ Scrolling props
 | Props | Type | Default Value | Description |
 | -------- | -------- | -------- | ---------  |
 | animate | DefaultStyles or AcceptedStyle[] | fade | You can choose various predefined animate style |
-| transition | ITransition | {duration : 500,easing : 'ease-in-out', delay : 300,} | You can manipulate the duration, easing function and delay of animation.|
-| transform | ITransform | {translateBy : '100px',opacityFrom : 0,scaleUpBy : 1.2,scaleDownBy : 0.6} | You can edit the transform property as per your preference. |
+| transition | ITransition | `{
+        duration : 30,
+        delay : 0,
+        easing : 'ease'
+}` | You can manipulate the duration, easing function and delay of animation.|
+| transform | ITransform | `{
+        translateBy : 500,
+        translateUnit : 'px',
+        scaleUpBy : 1.6,
+        scaleDownBy : 0.4,}` | You can edit the transform property as per your preference. |
 | animateWhen | TAnimateWhen | 'enter' | You can specify when to trigger animation.
 
 ## Types/Interface
@@ -123,6 +131,12 @@ Scrolling props
 	-  easing: It accepts string that represents the timing function of animation.
 	-  delay: It accepts number that represents the delay of animation.
 
+- TAnimateWhen : It accepts three values which represents when the start the animation.
+   -  exit : when component is going out of viewport
+   -  enter : when component is going in the viewport
+   -  both : in both above case
+
+ITransform for Scrolling component:
 
 -  ITransform : It accepts object with following key. Every key is optional here.
    -  translateBy : It accepts string which represents how much to move your component. ex.: '200px'.
@@ -130,10 +144,13 @@ Scrolling props
 	-  scaleUpBy : It accepts number which represents how much to scale up your component.
 	-  scaleDownBy : It accepts number which represents how much to scale down your component.;
 
-- TAnimateWhen : It accepts three values which represents when the start the animation.
-   -  exit : when component is going out of viewport
-   -  enter : when component is going in the viewport
-   -  both : in both above case
+ITransform for ScrollAnimate component:
+
+-  ITransform : It accepts object with following key. Every key is optional here.
+   -  translateBy : It accepts number which represents how much to move your component.
+	-  translateUnit : It accepts string which represents the unit e.g: px or em for translate value mentioned above.
+	-  scaleUpBy : It accepts number which represents how much to scale up your component.
+	-  scaleDownBy : It accepts number which represents how much to scale down your component.;
 
 ## License
 React Scrolling Library is licensed under the MIT License - see the LICENSE file for details. Feel free to use, modify, and distribute the library according to the terms of the license.
