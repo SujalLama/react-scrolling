@@ -72,8 +72,8 @@ ScrollAnimate props
 | once | boolean | true | If true, the animation will be executed only once. |
 | offset | string | 0px | This is similar to root margin in intersection observer. Check MDN for more detail.|
 | trigger | number or number[] | 1 | 1 trigger animation when every pixel of the component is seen, 0 trigger animation when even 1 pixel is shown. This is similar to threshold in intersection observer. Check MDN for more detail.|
-| transition | ITransition | {duration : 500,easing : 'ease-in-out',delay : 300,} | You can manipulate the duration, easing function and delay of animation.|
-| transform | ITransform | {translateBy : '100px',opacityFrom : 0,scaleUpBy : 1.2,scaleDownBy : 0.6} | You can edit the transform property as per your preference. |
+| transition | ITransition | {<br>duration : 500,<br>easing : 'ease-in-out',<br>delay : 300,<br>} | You can manipulate the duration, easing function and delay of animation.|
+| transform | ITransform | {<br>translateBy : '100px',<br>opacityFrom : 0,<br>scaleUpBy : 1.2,<br>scaleDownBy : 0.6<br>} | You can edit the transform property as per your preference. |
 
 
 Scrolling props
@@ -81,16 +81,8 @@ Scrolling props
 | Props | Type | Default Value | Description |
 | -------- | -------- | -------- | ---------  |
 | animate | DefaultStyles or AcceptedStyle[] | fade | You can choose various predefined animate style |
-| transition | ITransition | `{
-        duration : 30,
-        delay : 0,
-        easing : 'ease'
-}` | You can manipulate the duration, easing function and delay of animation.|
-| transform | ITransform | `{
-        translateBy : 500,
-        translateUnit : 'px',
-        scaleUpBy : 1.6,
-        scaleDownBy : 0.4,}` | You can edit the transform property as per your preference. |
+| transition | ITransition | {<br>duration : 30,<br>delay : 0,<br>easing : 'ease'<br>} | You can manipulate the duration, easing function and delay of animation.|
+| transform | ITransform | {<br>translateBy : 500,<br>translateUnit : 'px',<br>scaleUpBy : 1.6,<br>scaleDownBy : 0.4,<br>} | You can edit the transform property as per your preference. |
 | animateWhen | TAnimateWhen | 'enter' | You can specify when to trigger animation.
 
 ## Types/Interface
