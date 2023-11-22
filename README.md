@@ -11,7 +11,7 @@ Welcome to React Scrolling Library! This library is a collection of powerful and
 - [Usage](#usage)
 - [Components](#components)
 - [Props/Options](#props)
-- [Types/Interface](#types/interface)
+- [Types/Interface](#types)
 - [License](#license)
 
 ## Installation
@@ -85,7 +85,7 @@ Scrolling props
 | transform | ITransform | {<br>translateBy : 500,<br>translateUnit : 'px',<br>scaleUpBy : 1.6,<br>scaleDownBy : 0.4,<br>} | You can edit the transform property as per your preference. |
 | animateWhen | TAnimateWhen | 'enter' | You can specify when to trigger animation.
 
-## Types/Interface
+## Types
 
 -  DefaultStyles : It accepts string value that are predefined to represent various animation styles. Following are the values you can pass:
    -  "fade" 
