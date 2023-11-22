@@ -26,8 +26,8 @@ yarn add react-scrolling
 
 ## Examples
 
--  [Basic Example of Scrolling Component](https://codesandbox.io/p/sandbox/react-scroling-basic-scrolling-hpvhty){:target="_blank"}
--  [Basic Example of ScrollAnimate Component](https://codesandbox.io/p/sandbox/react-scroling-basic-scrollanimate-qmpc3c){:target="_blank"}
+-  [Basic Example of Scrolling Component](https://codesandbox.io/p/sandbox/react-scroling-basic-scrolling-hpvhty)
+-  [Basic Example of ScrollAnimate Component](https://codesandbox.io/p/sandbox/react-scroling-basic-scrollanimate-qmpc3c)
 
 ## Usage
 
@@ -156,4 +156,4 @@ ITransform for ScrollAnimate component:
 ## License
 React Scrolling Library is licensed under the MIT License - see the LICENSE file for details. Feel free to use, modify, and distribute the library according to the terms of the license.
 
-Happy coding with React Awesome Library! 🚀
+Happy coding with React Scrolling Library! 🚀
