@@ -3,6 +3,7 @@
 
 import './App.css'
 import {Scrolling, ScrollAnimate} from "../";
+import Parallax from './Parallax';
 
 function App() {
   
@@ -14,14 +15,14 @@ function App() {
       <div id="bottom"></div>
 
       {/* Scrolling  */}
-      <div>
+      {/* <div>
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
         <Scrolling>
           <Box  color='red' text="fade"/>
         </Scrolling>
       
-        <Scrolling animate='fade-down'>
+        <Scrolling animate="slide-up">
           <Box color='green' text="fade-down"/>
         </Scrolling>
     
@@ -97,11 +98,11 @@ function App() {
 
         <Box color='red' text="fade"/>
         <Box color='red' text="fade"/>
-      </div>
+      </div> */}
 
       {/* Scroll Animate */}
       
-      <div>
+      {/* <div>
         <ScrollAnimate>
           <Box  color='red' text="fade"/>
         </ScrollAnimate>
@@ -177,7 +178,31 @@ function App() {
         <ScrollAnimate animate='slide-right'>
           <Box  color='red' text="slide-right" />
         </ScrollAnimate>
+      </div> */}
+
+      {/* Parallax */}
+
+      
+
+      <div style={{display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', gap: '20px'}}>
+
+        
+        <Parallax speed={400} animation='up'>
+          <div style={{width: '100px', height: '100px', backgroundColor: 'green'}}></div>
+        </Parallax>
+
+        <Parallax speed={100} animation='down'>
+          <div style={{width: '100px', height: '100px', backgroundColor: 'green'}}></div>
+        </Parallax>
+        <Parallax speed={100} animation='left'>
+          <div style={{width: '100px', height: '100px', backgroundColor: 'green'}}></div>
+        </Parallax>
+        <Parallax speed={100} animation='right'>
+          <div style={{width: '100px', height: '100px', backgroundColor: 'green'}}></div>
+        </Parallax>
+
       </div>
+      <div style={{height: '100vh'}}></div>
 
     </div>
   )
